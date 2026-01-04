@@ -1,0 +1,8 @@
+{
+  "name": "Cyber-Developer Portfolio",
+  "description": "A high-performance, secure-themed portfolio website for a Website Developer and Cybersecurity Enthusiast, featuring an AI-powered assistant.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
