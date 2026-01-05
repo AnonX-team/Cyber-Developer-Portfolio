@@ -11,7 +11,7 @@ const AIAssistant: React.FC = () => {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Hi! I'm Adil's Pro AI. I'm now equipped with real-time web search and voice capabilities. How can I help you today?" }
+    { role: 'assistant', content: "Hi! I'm Muhammad Adil Khan's Pro AI Assistant. I'm now equipped with real-time web search and voice capabilities. How can I help you today?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -92,7 +92,7 @@ const AIAssistant: React.FC = () => {
         config: {
           responseModalities: [Modality.AUDIO],
           speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Puck' } } },
-          systemInstruction: "You are Adil Khan's professional voice representative. Answer concisely and professionally."
+          systemInstruction: "You are Muhammad Adil Khan's professional voice representative. Answer concisely and professionally."
         }
       });
 

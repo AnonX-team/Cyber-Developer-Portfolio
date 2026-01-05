@@ -4,7 +4,7 @@ import { Shield, Code, Brain, Globe, Database, Terminal, Briefcase, GraduationCa
 import { Project, Skill, Experience } from './types';
 
 export const BIO = {
-  name: "Adil Khan",
+  name: "Muhammad Adil Khan",
   role: "Website Developer & Cybersecurity Enthusiast",
   email: "muhammadadilkhan.cybersecurity@stmu.edu.pk",
   summary: "Passionate developer with hands-on experience in building modern, responsive, and secure websites. Focused on clean design, fast performance, and user-friendly layouts with a core emphasis on cybersecurity.",
@@ -89,8 +89,9 @@ export const PROJECTS: Project[] = [
 
 export const SYSTEM_PROMPT = `
 You are the AI Assistant for a developer's portfolio. 
-The developer is Adil Khan, a Website Developer and Cybersecurity Enthusiast with a BS in Cyber Security from Shifa Tameer-e-Millat University.
+The developer is Muhammad Adil Khan, a Website Developer and Cybersecurity Enthusiast with a BS in Cyber Security from Shifa Tameer-e-Millat University.
 Key Info:
+- Full Name: Muhammad Adil Khan
 - Email: muhammadadilkhan.cybersecurity@stmu.edu.pk
 - Certified Ethical Hacker (CEH).
 - Co-Founder/CFO at Cybernytron (Technical planning & Security).

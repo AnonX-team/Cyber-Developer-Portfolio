@@ -1,11 +1,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { Shield, ChevronRight, Cpu, Lock } from 'lucide-react';
-import { BIO } from '../constants';
+import { BIO } from '../constants.tsx';
 
 const Hero: React.FC = () => {
   const [text, setText] = useState('');
-  const fullText = "Initializing secure connection... Adil_OS v2.4 Loaded. Encryption: AES-256-GCM.";
+  const fullText = "Initializing secure connection... Muhammad_Adil_OS v2.4 Loaded. Encryption: AES-256-GCM.";
 
   useEffect(() => {
     let i = 0;

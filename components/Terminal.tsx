@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Terminal as TerminalIcon, X, Maximize2, Minimize2 } from 'lucide-react';
-import { BIO, SKILLS, PROJECTS } from '../constants';
+import { BIO, SKILLS, PROJECTS } from '../constants.tsx';
 
 const Terminal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [history, setHistory] = useState<string[]>(['Welcome to Adil-OS v2.4.0', 'Type "help" to see available commands.']);
+  const [history, setHistory] = useState<string[]>(['Welcome to Muhammad-Adil-OS v2.4.0', 'Type "help" to see available commands.']);
   const [input, setInput] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +51,7 @@ const Terminal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <div className="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-800">
           <div className="flex items-center gap-2">
             <TerminalIcon className="w-4 h-4 text-blue-500" />
-            <span className="text-xs font-mono text-gray-400">adil_khan@portfolio: ~</span>
+            <span className="text-xs font-mono text-gray-400">muhammad_adil@portfolio: ~</span>
           </div>
           <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors">
             <X className="w-4 h-4" />
