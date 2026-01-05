@@ -1,9 +1,9 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { SYSTEM_PROMPT } from "../constants";
+import { SYSTEM_PROMPT } from "../constants.tsx";
 
 export const getGeminiResponse = async (userMessage: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
   
   try {
     const response = await ai.models.generateContent({
@@ -13,14 +13,13 @@ export const getGeminiResponse = async (userMessage: string) => {
         systemInstruction: SYSTEM_PROMPT,
         temperature: 0.7,
         maxOutputTokens: 800,
-        tools: [{ googleSearch: {} }] // Pro Feature: Real-time search grounding
+        tools: [{ googleSearch: {} }]
       },
     });
 
     const text = response.text || "I'm sorry, I couldn't process that request.";
     const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
     
-    // If search results exist, append them as citations
     let citations = "";
     if (chunks && chunks.length > 0) {
       citations = "\n\nSources:\n" + chunks

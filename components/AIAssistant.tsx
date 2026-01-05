@@ -1,10 +1,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, User, Bot, Loader2, Mic, MicOff, Terminal as TerminalIcon } from 'lucide-react';
-import { getGeminiResponse } from '../services/geminiService';
-import { Message } from '../types';
-import Terminal from './Terminal';
-import { GoogleGenAI, Modality, LiveServerMessage } from '@google/genai';
+import { getGeminiResponse } from '../services/geminiService.ts';
+import { Message } from '../types.ts';
+import Terminal from './Terminal.tsx';
+import { GoogleGenAI, Modality } from '@google/genai';
 
 const AIAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,9 +46,8 @@ const AIAssistant: React.FC = () => {
     }
 
     setIsVoiceActive(true);
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
     
-    // Voice Decoding Helpers
     const decode = (base64: string) => {
       const binaryString = atob(base64);
       const bytes = new Uint8Array(binaryString.length);
@@ -68,58 +67,62 @@ const AIAssistant: React.FC = () => {
     audioContextRef.current = outputCtx;
     let nextStartTime = 0;
 
-    const sessionPromise = ai.live.connect({
-      model: 'gemini-2.5-flash-native-audio-preview-09-2025',
-      callbacks: {
-        onopen: () => {
-          setMessages(prev => [...prev, { role: 'assistant', content: "[Voice Mode Active] Listening for your questions..." }]);
+    try {
+      const sessionPromise = ai.live.connect({
+        model: 'gemini-2.5-flash-native-audio-preview-09-2025',
+        callbacks: {
+          onopen: () => {
+            setMessages(prev => [...prev, { role: 'assistant', content: "[Voice Mode Active] Listening for your questions..." }]);
+          },
+          onmessage: async (message: any) => {
+            const base64Audio = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
+            if (base64Audio) {
+              const audioBuffer = await decodeAudioData(decode(base64Audio), outputCtx);
+              const source = outputCtx.createBufferSource();
+              source.buffer = audioBuffer;
+              source.connect(outputCtx.destination);
+              nextStartTime = Math.max(nextStartTime, outputCtx.currentTime);
+              source.start(nextStartTime);
+              nextStartTime += audioBuffer.duration;
+            }
+          },
+          onclose: () => setIsVoiceActive(false),
+          onerror: () => setIsVoiceActive(false)
         },
-        onmessage: async (message: LiveServerMessage) => {
-          const base64Audio = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
-          if (base64Audio) {
-            const audioBuffer = await decodeAudioData(decode(base64Audio), outputCtx);
-            const source = outputCtx.createBufferSource();
-            source.buffer = audioBuffer;
-            source.connect(outputCtx.destination);
-            nextStartTime = Math.max(nextStartTime, outputCtx.currentTime);
-            source.start(nextStartTime);
-            nextStartTime += audioBuffer.duration;
-          }
-        },
-        onclose: () => setIsVoiceActive(false),
-        onerror: () => setIsVoiceActive(false)
-      },
-      config: {
-        responseModalities: [Modality.AUDIO],
-        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Puck' } } },
-        systemInstruction: "You are Adil Khan's professional voice representative. Answer concisely and professionally."
-      }
-    });
-
-    sessionRef.current = await sessionPromise;
-    
-    // Microphone Streaming
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const inputCtx = new AudioContext({ sampleRate: 16000 });
-    const source = inputCtx.createMediaStreamSource(stream);
-    const processor = inputCtx.createScriptProcessor(4096, 1, 1);
-    
-    processor.onaudioprocess = (e) => {
-      const inputData = e.inputBuffer.getChannelData(0);
-      const int16 = new Int16Array(inputData.length);
-      for (let i = 0; i < inputData.length; i++) int16[i] = inputData[i] * 32768;
-      
-      let binary = '';
-      const bytes = new Uint8Array(int16.buffer);
-      for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
-      
-      sessionRef.current?.sendRealtimeInput({
-        media: { data: btoa(binary), mimeType: 'audio/pcm;rate=16000' }
+        config: {
+          responseModalities: [Modality.AUDIO],
+          speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Puck' } } },
+          systemInstruction: "You are Adil Khan's professional voice representative. Answer concisely and professionally."
+        }
       });
-    };
-    
-    source.connect(processor);
-    processor.connect(inputCtx.destination);
+
+      sessionRef.current = await sessionPromise;
+      
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const inputCtx = new AudioContext({ sampleRate: 16000 });
+      const source = inputCtx.createMediaStreamSource(stream);
+      const processor = inputCtx.createScriptProcessor(4096, 1, 1);
+      
+      processor.onaudioprocess = (e) => {
+        const inputData = e.inputBuffer.getChannelData(0);
+        const int16 = new Int16Array(inputData.length);
+        for (let i = 0; i < inputData.length; i++) int16[i] = inputData[i] * 32768;
+        
+        let binary = '';
+        const bytes = new Uint8Array(int16.buffer);
+        for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+        
+        sessionRef.current?.sendRealtimeInput({
+          media: { data: btoa(binary), mimeType: 'audio/pcm;rate=16000' }
+        });
+      };
+      
+      source.connect(processor);
+      processor.connect(inputCtx.destination);
+    } catch (e) {
+      console.error(e);
+      setIsVoiceActive(false);
+    }
   };
 
   return (
@@ -152,7 +155,7 @@ const AIAssistant: React.FC = () => {
               </div>
             </div>
 
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-950/50 cyber-grid">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-950/50 cyber-grid custom-scrollbar">
               {messages.map((m, idx) => (
                 <div key={idx} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`flex gap-2 max-w-[90%] ${m.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
@@ -182,7 +185,7 @@ const AIAssistant: React.FC = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Ask Adil's AI (e.g., 'What are the top CVEs this month?')"
+                  placeholder="Ask Adil's AI..."
                   className="flex-1 bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-gray-600"
                 />
                 <button 

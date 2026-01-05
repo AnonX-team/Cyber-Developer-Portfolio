@@ -1,13 +1,13 @@
 
 import React from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Skills from './components/Skills';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
-import AIAssistant from './components/AIAssistant';
-import { BIO } from './constants';
+import Navbar from './components/Navbar.tsx';
+import Hero from './components/Hero.tsx';
+import Skills from './components/Skills.tsx';
+import Experience from './components/Experience.tsx';
+import Projects from './components/Projects.tsx';
+import Contact from './components/Contact.tsx';
+import AIAssistant from './components/AIAssistant.tsx';
+import { BIO } from './constants.tsx';
 
 const App: React.FC = () => {
   return (
@@ -28,7 +28,7 @@ const App: React.FC = () => {
             &copy; {new Date().getFullYear()} {BIO.name}. Built with React, Tailwind & Gemini AI.
           </p>
           <p className="mt-2 text-xs text-blue-500/60 mono">
-            SECURE_HANDSHAKE_ESTABLISHED: VERSION 1.0.5
+            SECURE_HANDSHAKE_ESTABLISHED: VERSION 1.0.6
           </p>
         </div>
       </footer>
