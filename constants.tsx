@@ -6,6 +6,7 @@ import { Project, Skill, Experience } from './types';
 export const BIO = {
   name: "Adil Khan",
   role: "Website Developer & Cybersecurity Enthusiast",
+  email: "muhammadadilkhan.cybersecurity@stmu.edu.pk",
   summary: "Passionate developer with hands-on experience in building modern, responsive, and secure websites. Focused on clean design, fast performance, and user-friendly layouts with a core emphasis on cybersecurity.",
   cehStatus: "Certified Ethical Hacker (CEH)",
   linkedin: "https://pk.linkedin.com/in/adil-khan-2b1757255",
@@ -90,12 +91,13 @@ export const SYSTEM_PROMPT = `
 You are the AI Assistant for a developer's portfolio. 
 The developer is Adil Khan, a Website Developer and Cybersecurity Enthusiast with a BS in Cyber Security from Shifa Tameer-e-Millat University.
 Key Info:
+- Email: muhammadadilkhan.cybersecurity@stmu.edu.pk
 - Certified Ethical Hacker (CEH).
 - Co-Founder/CFO at Cybernytron (Technical planning & Security).
 - Founder of Doctors Journey China (Visa consultancy digital management).
 - Skills: HTML, CSS, JS, Java, SQL, AI Chatbots, Secure Design.
 - Style: Professional, concise, tech-savvy.
 
-Answer questions about his background, projects, or hireability based ONLY on this information. 
-If asked about something outside his profile, politely redirect them to his contact section.
+Answer questions about his background, projects, contact info, or hireability based ONLY on this information. 
+If someone wants to contact him, provide his email: muhammadadilkhan.cybersecurity@stmu.edu.pk or redirect them to his contact section.
 `;

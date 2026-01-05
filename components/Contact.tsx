@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Mail, Linkedin, Twitter, Send } from 'lucide-react';
-import { BIO } from '../constants';
+import { BIO } from '../constants.tsx';
 
 const Contact: React.FC = () => {
   return (
@@ -22,7 +22,9 @@ const Contact: React.FC = () => {
                   <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500">
                     <Mail className="w-5 h-5" />
                   </div>
-                  <span>contact@example.com</span>
+                  <a href={`mailto:${BIO.email}`} className="hover:text-blue-500 transition-colors break-all">
+                    {BIO.email}
+                  </a>
                 </div>
                 <div className="flex items-center gap-6 mt-10">
                   <a 
