@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Menu, X, Terminal } from 'lucide-react';
+import { BIO } from '../constants.tsx';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,14 +14,19 @@ const Navbar: React.FC = () => {
     { name: 'Contact', href: '#contact' },
   ];
 
+  // Helper to split name for themed coloring
+  const nameParts = BIO.name.split(' ');
+  const firstName = nameParts.slice(0, -1).join(' ');
+  const lastName = nameParts[nameParts.length - 1];
+
   return (
     <nav className="fixed top-0 w-full z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
-            <Terminal className="text-blue-500 w-6 h-6" />
-            <span className="text-xl font-bold mono tracking-tighter uppercase">
-              Cyber<span className="text-blue-500">Dev</span>
+            <Terminal className="text-blue-500 w-5 h-5" />
+            <span className="text-lg md:text-xl font-bold mono tracking-tighter uppercase whitespace-nowrap">
+              {firstName} <span className="text-blue-500">{lastName}</span>
             </span>
           </div>
           
